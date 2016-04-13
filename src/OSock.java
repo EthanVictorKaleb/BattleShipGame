@@ -10,7 +10,7 @@ public class OSock
 	//variables
 	private boolean isPlayerOne;
 	private int portNum = 49152;
-	private Inet4Address ip;
+	private InetAddress ip;
 	PrintWriter out;
 	BufferedReader in;
 	
@@ -32,7 +32,7 @@ public class OSock
 		return portNum;
 	}
 	
-	public Inet4Address get_ip()
+	public InetAddress get_ip()
 	{
 		return ip;
 	}
@@ -48,7 +48,7 @@ public class OSock
 		portNum = set;
 	}
 	
-	public void set_ip(Inet4Address set)
+	public void set_ip(InetAddress set)
 	{
 		ip = set;
 	}

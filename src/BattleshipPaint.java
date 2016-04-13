@@ -5,6 +5,8 @@ import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import java.net.*;
+import java.io.*;
 
 import java.awt.event.*; // allows buttons
 
@@ -26,20 +28,22 @@ public class BattleshipPaint extends java.applet.Applet implements ActionListene
 	private Button Player_2;
 	private ButtonGroup Random;
 	private Button Randomize;
-	private int hit;
+	private Image hit;
+	private Image rp;
+	private Image wp;
 	private ButtonGroup Connectg;
 	private Button Connect;
 	private Button p2;
-	private int AircraftCx;
-	private int AircraftCy;
-	private int Battleshipx;
-	private int Battleshipy;
-	private int Destroyerx;
-	private int Destroyery;
-	private int Submarinex;
-	private int Submariney;
-	private int Patrolx;
-	private int Patroly;
+	private Point P_AC;
+	private Point P_BS;
+	private Point P_D;
+	private Point S;
+	private Point PP;
+	private Game Game = new Game();
+	private OSock OSock = new OSock();
+	private boolean isPlayerOne;
+	public boolean isHit;
+	InetAddress ip;
 	
 	public void paint (Graphics g)
 	{
@@ -220,7 +224,7 @@ public class BattleshipPaint extends java.applet.Applet implements ActionListene
 		//pieces
 		Image Aircraft;
 		Aircraft = getImage(getCodeBase(), "AirCraft.png");
-		g.drawImage(Aircraft, 50, 73, 240, 250, this);
+		g.drawImage(Aircraft, 52, 73, 240, 250, this);
 		Image Battleship;
 		Battleship = getImage(getCodeBase(), "BattleShip.png");
 		g.drawImage(Battleship, 110, 73, 230, 230, this);
@@ -233,6 +237,17 @@ public class BattleshipPaint extends java.applet.Applet implements ActionListene
 		Image Patrol;
 		Patrol = getImage(getCodeBase(), "Patrol.png");
 		g.drawImage(Patrol, 320, 73, 130, 130, this);
+		Image Redpin;
+		rp = getImage(getCodeBase(), "RedPin.png");
+		Image Whitepin;
+		wp = getImage(getCodeBase(), "WhitePin.png");
+		
+		Image Hit;
+		hit = getImage(getCodeBase(), "HIT.png");
+		if(isHit)
+		{
+			g.drawImage(hit, 230, 50, 900, 600, this);
+		}
 	}
 
 	public void init()
@@ -375,24 +390,63 @@ public class BattleshipPaint extends java.applet.Applet implements ActionListene
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-		if(e.getSource() == Player_2)
+	//if they press player one
+	if(e.getSource() == Player_1)
+		{
+			isPlayerOne = true;
+		}
+	
+	//if they press player two
+	if(e.getSource() == Player_2)
 		{
 			tf_ip.setVisible(true);
+			isPlayerOne = false;
 		}
-		
+	
+	if(e.getSource() == b_start)
+		{
+			P_AC = Game.setUpP_AC();
+			P_BS = Game.setUpP_BS();
+			P_D = Game.setUpP_D();
+			S = Game.setUpS();
+			PP = Game.setUpPP();
+			repaint();
+		}
+	
+	if(e.getSource() == Connect)
+		{
+			//tell OSock what player they are
+			OSock.set_isPlayerOne(isPlayerOne);
+			
+			//if they are player one
+			if(isPlayerOne)
+			{
+				OSock.connect();
+			}
+			
+			//if they are player two
+			if(!isPlayerOne)
+			{
+				try
+				{
+					ip = InetAddress.getByName(tf_ip.getText());
+				}
+				catch(UnknownHostException h)
+				{
+					System.out.println("You need to pass it an ip not a hostname");
+				}
+				finally
+				{
+				OSock.set_ip(ip);
+				OSock.connect();
+				}
+			}//end if is not player one
+		}
 	}
+	public void init1()
+	{
+		
+		
+	}		
 	
-	//submarine
-	
-	//destroyers
-	
-	//patrol boats
-	
-	//white pins
-	
-	//red pins
-	
-	//explosion
-	
-	//sinking/sunk
 }
