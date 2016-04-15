@@ -1,4 +1,4 @@
-import java.awt.*;
+ import java.awt.*;
 
 public class Game 
 {
@@ -177,19 +177,94 @@ public class Game
 	
 	//turns the letters from the board into numbers
 	//returns a string that can be sent through OSock
-	public void translate(String x, String y)
+	public String translate(String x, String y)
 	{
-		String A;
-		if(x == "A" || x == "a") {A = "0";}
-		if(x == "B" || x == "b") {A = "1";}
-		if(x == "C" || x == "c") {A = "2";}
-		if(x == "D" || x == "d") {A = "3";}
-		if(x == "E" || x == "e") {A = "4";}//THIS METHOD IS NOT FINISHED
-		if(x == "F" || x == "f") {A = "5";}
-		if(x == "G" || x == "g") {A = "6";}
-		if(x == "H" || x == "h") {A = "7";}
-		if(x == "I" || x == "i") {A = "8";}
-		if(x == "J" || x == "j") {A = "9";}
+		String A = "1";
+		String B = "1";
+		String C;
+		if(x == "A" || x == "a") 
+		{
+			A = "0";
+		}
+		if(x == "B" || x == "b") 
+		{
+			A = "1";
+		}
+		if(x == "C" || x == "c")
+		{
+			A = "2";
+		}
+		if(x == "D" || x == "d")
+		{
+			A = "3";
+		}
+		if(x == "E" || x == "e") 
+		{
+			A = "4";
+		}
+		if(x == "F" || x == "f")
+		{
+			A = "5";
+		}
+		if(x == "G" || x == "g")
+		{
+			A = "6";
+		}
+		if(x == "H" || x == "h")
+		{
+			A = "7";
+		}
+		if(x == "I" || x == "i")
+		{
+			A = "8";
+		}
+		if(x == "J" || x == "j")
+		{
+			A = "9";
+		}
+		if(y == "1")
+		{
+			B = "0";
+		}
+		if(y == "2")
+		{
+			B = "1";
+		}
+		if(y == "3")
+		{
+			B = "2";
+		}
+		if(y == "4")
+		{
+			B = "3";
+		}
+		if(y == "5")
+		{
+			B = "4";
+		}
+		if(y == "6")
+		{
+			B = "5";
+		}
+		if(y == "7")
+		{
+			B = "6";
+		}
+		if(y == "8")
+		{
+			B = "7";
+		}
+		if(y == "9")
+		{
+			B = "8";
+		}
+		if(y == "10")
+		{
+			B = "9";
+		}
+		
+		C = A + " " + B;
+		return C;		
 	}//end translate
 	
 }//end Game
