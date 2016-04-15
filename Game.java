@@ -1,0 +1,195 @@
+import java.awt.*;
+
+public class Game 
+{
+	//the board with the ships on it
+	private int[][] board = new int[10][10];
+	//the other player's board
+	private int[][] otherboard = new int[10][10];
+	
+	//change board array values
+	public void set_board(int x, int y, int value)
+	{
+		board[x][y] = value;
+	}//end set_board
+	
+	//change the otherboard array values
+	public void set_otherboard(int x, int y, int value)
+	{
+		otherboard[x][y] = value;
+	}//end set_otherboard
+	
+	//get board array values
+	public int get_board(int x, int y)
+	{
+		return board[x][y];
+	}//end get_board
+	
+	//get otherboard array values
+	public int get_otherboard(int x, int y)
+	{
+		return otherboard[x][y];
+	}
+	
+	//place the ships
+	public Point setUpP_AC()
+	{
+		int startx = (int)(Math.random()*9);
+		int starty = (int)(Math.random()*5);
+		
+		board[startx][starty] = 1;
+		board[startx][starty + 1] = 1;
+		board[startx][starty + 2] = 1;
+		board[startx][starty + 3] = 1;
+		board[startx][starty + 4] = 1;
+		
+		//calculate where it will be in terms of pixels
+		Point Out = new Point();
+		Out.x = (startx + 1)*52;
+		Out.y = (starty + 1)*73;
+		//return the coordinates
+		return Out;
+		
+	}//end setUpACCarrier
+	
+	public Point setUpP_BS()
+	{
+		int startx = (int)(Math.random()*6);
+		int starty = (int)(Math.random()*9);
+		
+		if(board[startx][starty] == 0&&board[startx+1][starty] == 0&&board[startx+2][starty] == 0&&board[startx+3][starty] == 0)
+		{
+			board[startx][starty] = 1;
+			board[startx + 1][starty] = 1;
+			board[startx + 2][starty] = 1;
+			board[startx + 3][starty] = 1;
+		}
+		
+		else
+		{
+			setUpP_BS();
+		}
+		
+		//calculate where it will be in terms of pixels
+		Point Out = new Point();
+		Out.x = (startx + 1)*52;
+		Out.y = (starty + 1)*73;
+		//return the coordinates
+		return Out;
+		
+	}//end setUpBattleship
+	
+	public Point setUpP_D()
+	{
+		int startx = (int)(Math.random()*9);
+		int starty = (int)(Math.random()*6);
+		
+		if(board[startx][starty] == 0&&board[startx][starty+1] == 0&&board[startx][starty+2] == 0)
+		{
+			board[startx][starty] = 1;
+			board[startx][starty + 1] = 1;
+			board[startx][starty + 2] = 1;
+		}
+		
+		else
+		{
+			setUpP_D();
+		}
+		//calculate where it will be in terms of pixels
+		Point Out = new Point();
+		Out.x = (startx + 1)*52;
+		Out.y = (starty + 1)*73;
+		//return the coordinates
+		return Out;
+		
+	}//end setUpDestroyer
+	
+	public Point setUpS()
+	{
+		int startx = (int)(Math.random()*6);
+		int starty = (int)(Math.random()*9);
+		
+		if(board[startx][starty] == 0&&board[startx+1][starty] == 0&&board[startx+2][starty] == 0)
+		{
+			board[startx][starty] = 1;
+			board[startx + 1][starty] = 1;
+			board[startx + 2][starty] = 1;
+		}
+		
+		else
+		{
+			setUpS();
+		}
+		
+		//calculate where it will be in terms of pixels
+		Point Out = new Point();
+		Out.x = (startx + 1)*52;
+		Out.y = (starty + 1)*73;
+		//return the coordinates
+		return Out;
+		
+	}//end setUpSub
+	
+	public Point setUpPP()
+	{
+		int startx = (int)(Math.random()*9);
+		int starty = (int)(Math.random()*7);
+		
+		if(board[startx][starty] == 0&&board[startx][starty +1] == 0)
+		{
+			board[startx][starty] = 1;
+			board[startx][starty + 1] = 1;
+		}
+		
+		else
+		{
+			setUpPP();
+		}
+		
+		//calculate where it will be in terms of pixels
+		Point Out = new Point();
+		Out.x = (startx + 1)*52;
+		Out.y = (starty + 1)*73;
+		//return the coordinates
+		return Out;
+		
+	}
+	
+	//when they fire on your board
+	public void hit(int x, int y)
+	{
+		board[x][y] = board[x][y] + 2;
+	}//end hit()
+	
+	//when your fire on their board
+	public void fire(int x, int y, boolean isHit)
+	{
+		if(isHit)
+		{
+			otherboard[x][y] += 2;
+		}
+		else
+		{
+			otherboard[x][y] += 1;
+		}
+		
+	}//end fire()
+	
+	//turns the letters from the board into numbers
+	//returns a string that can be sent through OSock
+	public void translate(String x, String y)
+	{
+		String A;
+		if(x == "A" || x == "a") {A = "0";}
+		if(x == "B" || x == "b") {A = "1";}
+		if(x == "C" || x == "c") {A = "2";}
+		if(x == "D" || x == "d") {A = "3";}
+		if(x == "E" || x == "e") {A = "4";}//THIS METHOD IS NOT FINISHED
+		if(x == "F" || x == "f") {A = "5";}
+		if(x == "G" || x == "g") {A = "6";}
+		if(x == "H" || x == "h") {A = "7";}
+		if(x == "I" || x == "i") {A = "8";}
+		if(x == "J" || x == "j") {A = "9";}
+	}//end translate
+	
+}//end Game
