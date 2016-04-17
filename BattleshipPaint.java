@@ -42,7 +42,7 @@ public class BattleshipPaint extends java.applet.Applet implements ActionListene
 	//these allow us to use the other classes
 	private Game Game = new Game();
 	private OSock OSock = new OSock();
-	
+	//to tell if you are client or server
 	private boolean isPlayerOne;
 	//
 	public boolean isHit;
@@ -50,6 +50,11 @@ public class BattleshipPaint extends java.applet.Applet implements ActionListene
 	public InetAddress ip;
 	//to tell if it is your turn
 	private boolean isTurn = isPlayerOne;
+	//array of red pins
+	Point[] redpins = new Point[100];
+	Point[] whitepins = new Point[100];
+	int pin_numw = 0;
+	int pin_numr = 0;
 	
 	public void paint (Graphics g)
 	{
@@ -247,6 +252,16 @@ public class BattleshipPaint extends java.applet.Applet implements ActionListene
 		rp = getImage(getCodeBase(), "RedPin.png");
 		Image Whitepin;
 		wp = getImage(getCodeBase(), "WhitePin.png");
+		//draw red pins
+		for(int i = 0; i < pin_numr; i++)
+		{
+			g.drawImage(rp, redpins[i].x, redpins[i].y, 20, 20, this);
+		}//end for, redpins
+		//draw white pins
+		for(int i = 0; i < pin_numw; i++)
+		{
+			g.drawImage(wp, whitepins[i].x, whitepins[i].y, 20, 20, this);
+		}
 		
 		Image Hit;
 		hit = getImage(getCodeBase(), "HIT.png");
@@ -254,7 +269,7 @@ public class BattleshipPaint extends java.applet.Applet implements ActionListene
 		{
 			g.drawImage(hit, 230, 50, 900, 600, this);
 		}
-	}
+	}//ends paint method
 
 	public void init()
 	{
@@ -357,117 +372,147 @@ public class BattleshipPaint extends java.applet.Applet implements ActionListene
 		add(p2);
 		
 		//image button
-	}
+	}//ends init method
 	
-	// Aircraft Carrier
-	@Override
+	//auto generated methods because of the class BattleshipPaint's extensions
 	public void itemStateChanged(ItemEvent e)
 	{
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
+	
 	public void mouseClicked(MouseEvent e) 
 	{
 
 	}
-	@Override
+	
 	public void mousePressed(MouseEvent e) 
 	{
 	}
-	@Override
+	
 	public void mouseReleased(MouseEvent e) 
 	{
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
+	
 	public void mouseEntered(MouseEvent e) 
 	{
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
+	
 	public void mouseExited(MouseEvent e)
 	{
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
+	
 	public void actionPerformed(ActionEvent e) 
 	{
-	//if they press player one
-	if(e.getSource() == Player_1)
-		{
-			isPlayerOne = true;
-		}
-	
-	//if they press player two
-	if(e.getSource() == Player_2)
-		{
-			tf_ip.setVisible(true);
-			isPlayerOne = false;
-		}
-	
-	if(e.getSource() == b_start)
-		{
-			P_AC = Game.setUpP_AC();
-			P_BS = Game.setUpP_BS();
-			P_D = Game.setUpP_D();
-			S = Game.setUpS();
-			PP = Game.setUpPP();
-			repaint();
-		}
-	
-	if(e.getSource() == Connect)
-		{
-			//tell OSock what player they are
-			OSock.set_isPlayerOne(isPlayerOne);
-			
-			//if they are player one
-			if(isPlayerOne)
+		//if they press player one
+		if(e.getSource() == Player_1)
 			{
-				OSock.connect();
+				isPlayerOne = true;
+			}
+		
+		//if they press player two
+		if(e.getSource() == Player_2)
+			{
+				tf_ip.setVisible(true);
+				isPlayerOne = false;
+			}
+		
+		if(e.getSource() == b_start)
+			{
+				P_AC = Game.setUpP_AC();
+				P_BS = Game.setUpP_BS();
+				P_D = Game.setUpP_D();
+				S = Game.setUpS();
+				PP = Game.setUpPP();
+				repaint();
+			}
+		
+		if(e.getSource() == Connect)
+			{
+				//tell OSock what player they are
+				OSock.set_isPlayerOne(isPlayerOne);
+				
+				//if they are player one
+				if(isPlayerOne)
+				{
+					OSock.connect();
+				}
+				
+				//if they are player two
+				if(!isPlayerOne)
+				{
+					try
+					{
+						ip = InetAddress.getByName(tf_ip.getText());
+					}
+					catch(UnknownHostException h)
+					{
+						System.out.println("You need to pass it an ip not a hostname");
+					}
+					finally
+					{
+					OSock.set_ip(ip);
+					OSock.connect();
+					}
+				}//end if is not player one
+				
+			}//end if e == Connect
+		
+		if(e.getSource() == b_attack)
+			{
+			//send the coordinates to the other player 
+			OSock.writeSock(Game.translate(tf_cl.getText(), tf_cn.getText()));
+			//end turn
+			isTurn = false;
+			otherTurn();
+			}
+	}//end actionPerformed
+	
+	public void otherTurn()
+	{
+		//wait on other player to send data
+		while(OSock.readSock() == null)
+		{
+			try
+			{
+				Thread.sleep(100);
+			} 
+			catch (InterruptedException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			
-			//if they are player two
-			if(!isPlayerOne)
-			{
-				try
-				{
-					ip = InetAddress.getByName(tf_ip.getText());
-				}
-				catch(UnknownHostException h)
-				{
-					System.out.println("You need to pass it an ip not a hostname");
-				}
-				finally
-				{
-				OSock.set_ip(ip);
-				OSock.connect();
-				}
-			}//end if is not player one
-			
-		}//end if e == Connect
-	
-	if(e.getSource() == b_attack)
+		}//end loop waiting on other player to send data
+		
+		//read data from other player into string
+		String attackdata = OSock.readSock();
+		//turn string into an array of two numbers(coordinates of attack)
+		String[] move = attackdata.split("[ ]+");
+		//put each number into an integer for the board and one for the pixel
+		int xhit = Integer.parseInt(move[0]);
+		int xhitcoord = 52 + (58*(xhit+1));
+		int yhit = Integer.parseInt(move[1]);
+		int yhitcoord = 52 + (58*(yhit+1));
+		//update board array with attack
+		Game.hit(xhit, yhit);
+		//update array of white or red pins
+		if(Game.get_board(xhit, yhit) == 2)
 		{
-		//send the coordinates to the other player 
-		OSock.writeSock(Game.translate(tf_cl.getText(), tf_cn.getText()));
-		//end turn
-		isTurn = false;
+			whitepins[pin_numw] = new Point(xhitcoord, yhitcoord);
+			pin_numw++;
 		}
-	}
-	public void init1()
-	{
+		else if(Game.get_board(xhit, yhit) == 3)
+		{
+			redpins[pin_numr] = new Point(xhitcoord, yhitcoord);
+			pin_numr++;
+		}
 		
-		
-	}		
-	
-	//loop for when it is the other player's turn
-	while(!isTurn)
-	{
-		
-	}
-	
-}
+	}	
+}//end class
