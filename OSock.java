@@ -9,7 +9,7 @@ public class OSock
 
 	//variables
 	private boolean isPlayerOne;
-	private int portNum = 49152;
+	private int portNum = 49153;
 	private InetAddress ip;
 	PrintWriter out;
 	BufferedReader in;
@@ -67,9 +67,16 @@ public class OSock
 			)
 			{
 				//accept connection from client and bind received data to a stream
-				Socket clientSocket = SSocket.accept();
-				out = new PrintWriter(clientSocket.getOutputStream(), true);                   
-				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				while(true)
+				{
+					Socket clientSocket = SSocket.accept();
+					out = new PrintWriter(clientSocket.getOutputStream(), true);                   
+					in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+					if(clientSocket != null)
+					{
+						break;
+					}
+				}
 			}
 			catch(IOException e)
 			{
@@ -102,7 +109,7 @@ public class OSock
 				Socket CSocket = new Socket(ip, portNum);	
 			)
 			{
-				out = new PrintWriter(CSocket.getOutputStream(), true);
+				out = new PrintWriter(CSocket.getOutputStream(), true);                   
 				in = new BufferedReader(new InputStreamReader(CSocket.getInputStream()));
 			}
 			catch(IOException s)
@@ -150,7 +157,7 @@ public class OSock
 	//this sends data to the other player, you pass it as the variable send
 	public void writeSock(String send)
 	{
-		out.print(send);
+		out.println(send);
 	}//end writeSock()
 
 }//end OSock
