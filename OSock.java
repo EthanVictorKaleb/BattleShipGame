@@ -1,6 +1,7 @@
 //import packages
 import java.net.*;
 import java.io.*;
+import java.net.Socket;
 
 //this class is to give networking capability to the battleship game
 public class OSock 
@@ -61,22 +62,18 @@ public class OSock
 		if(isPlayerOne)
 		{
 			try
-			(
-					//create a socket if port is available
-					ServerSocket SSocket = new ServerSocket(portNum);
-			)
 			{
+				//create a socket if port is available
+				ServerSocket SSocket = new ServerSocket(portNum);
+			
 				//accept connection from client and bind received data to a stream
-				while(true)
-				{
-					Socket clientSocket = SSocket.accept();
-					out = new PrintWriter(clientSocket.getOutputStream(), true);                   
-					in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-					if(clientSocket != null)
-					{
-						break;
-					}
-				}
+				Socket clientSocket = SSocket.accept();
+				out = new PrintWriter(clientSocket.getOutputStream(), true);                   
+				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				
+				//disable nagel's algorithm
+				clientSocket.setTcpNoDelay(false);
+				
 			}
 			catch(IOException e)
 			{
@@ -104,13 +101,14 @@ public class OSock
 		else if(!isPlayerOne)
 		{
 			try
-			(
+			{
 				//try and create a socket if port number is available
 				Socket CSocket = new Socket(ip, portNum);	
-			)
-			{
 				out = new PrintWriter(CSocket.getOutputStream(), true);                   
 				in = new BufferedReader(new InputStreamReader(CSocket.getInputStream()));
+
+				//disable nagel's algorithm
+				CSocket.setTcpNoDelay(false);
 			}
 			catch(IOException s)
 			{
@@ -132,7 +130,8 @@ public class OSock
 				//no code needed here
 			}
 		}//end else if
-	
+		//should clear the printwriter
+		out.flush();
 	}//end connect() method
 	
 	//this reads what the other player sends you, returns it as a string
@@ -157,6 +156,7 @@ public class OSock
 	//this sends data to the other player, you pass it as the variable send
 	public void writeSock(String send)
 	{
+		out.flush();
 		out.println(send);
 	}//end writeSock()
 
