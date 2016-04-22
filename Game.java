@@ -45,8 +45,8 @@ public class Game
 		
 		//calculate where it will be in terms of pixels
 		Point Out = new Point();
-		Out.x = (startx + 1)*52;
-		Out.y = (starty + 1)*73;
+		Out.x = 52+(startx + 1)*55;
+		Out.y = 73+(starty + 1)*50;
 		//return the coordinates
 		return Out;
 		
@@ -54,26 +54,32 @@ public class Game
 	
 	public Point setUpP_BS()
 	{
-		int startx = (int)(Math.random()*6);
-		int starty = (int)(Math.random()*9);
+		//top of ship grid coords
+		int startx;
+		int starty;
 		
-		if(board[startx][starty] == 0&&board[startx+1][starty] == 0&&board[startx+2][starty] == 0&&board[startx+3][starty] == 0)
+		//while loop to retry if ship is placed over another ship
+		while(true)
 		{
-			board[startx][starty] = 1;
-			board[startx + 1][starty] = 1;
-			board[startx + 2][starty] = 1;
-			board[startx + 3][starty] = 1;
-		}
-		
-		else
-		{
-			setUpP_BS();
-		}
+			//randomly set top of ship coords
+			startx = (int)(Math.random()*9);
+			starty = (int)(Math.random()*6);
+			//if ship will not overlap do not loop again
+			if(board[startx][starty] == 0&&board[startx][starty+1] == 0&&board[startx][starty+2] == 0&&board[startx][starty+3] == 0)
+			{
+				board[startx][starty] = 1;
+				board[startx + 1][starty] = 1;
+				board[startx + 2][starty] = 1;
+				board[startx + 3][starty] = 1;
+				break;
+			}
+			
+		}//end while
 		
 		//calculate where it will be in terms of pixels
 		Point Out = new Point();
-		Out.x = (startx + 1)*52;
-		Out.y = (starty + 1)*73;
+		Out.x = 52+(startx + 1)*55;
+		Out.y = 73+(starty + 1)*50;
 		//return the coordinates
 		return Out;
 		
@@ -81,24 +87,31 @@ public class Game
 	
 	public Point setUpP_D()
 	{
-		int startx = (int)(Math.random()*9);
-		int starty = (int)(Math.random()*6);
+		int startx;
+		int starty;
 		
-		if(board[startx][starty] == 0&&board[startx][starty+1] == 0&&board[startx][starty+2] == 0)
+		//while to redo if ships overlap
+		while(true)
 		{
-			board[startx][starty] = 1;
-			board[startx][starty + 1] = 1;
-			board[startx][starty + 2] = 1;
-		}
+			startx = (int)(Math.random()*9);
+			starty = (int)(Math.random()*6);
+			
+			//if ships dont overlap
+			if(board[startx][starty] == 0&&board[startx][starty+1] == 0&&board[startx][starty+2] == 0)
+			{
+				//update board
+				board[startx][starty] = 1;
+				board[startx][starty + 1] = 1;
+				board[startx][starty + 2] = 1;
+				break;
+			}
+			
+		}//end while
 		
-		else
-		{
-			setUpP_D();
-		}
 		//calculate where it will be in terms of pixels
 		Point Out = new Point();
-		Out.x = (startx + 1)*52;
-		Out.y = (starty + 1)*73;
+		Out.x = 68+(startx + 1)*55;
+		Out.y = 73+(starty + 1)*50;
 		//return the coordinates
 		return Out;
 		
@@ -106,50 +119,58 @@ public class Game
 	
 	public Point setUpS()
 	{
-		int startx = (int)(Math.random()*6);
-		int starty = (int)(Math.random()*9);
+		//init
+		int startx;
+		int starty;
 		
-		if(board[startx][starty] == 0&&board[startx+1][starty] == 0&&board[startx+2][starty] == 0)
+		while(true)
 		{
-			board[startx][starty] = 1;
-			board[startx + 1][starty] = 1;
-			board[startx + 2][starty] = 1;
-		}
-		
-		else
-		{
-			setUpS();
-		}
-		
+			//top ship coords
+			startx = (int)(Math.random()*9);
+			starty = (int)(Math.random()*6);
+			//if ship doesnt overlap
+			if(board[startx][starty] == 0&&board[startx][starty+1] == 0&&board[startx][starty+2] == 0)
+			{
+				board[startx][starty] = 1;
+				board[startx + 1][starty] = 1;
+				board[startx + 2][starty] = 1;
+				break;
+			}
+			
+		}//end while
 		//calculate where it will be in terms of pixels
 		Point Out = new Point();
-		Out.x = (startx + 1)*52;
-		Out.y = (starty + 1)*73;
+		Out.x = 52+(startx + 1)*55;
+		Out.y = 73+(starty + 1)*50;
 		//return the coordinates
 		return Out;
+		
 		
 	}//end setUpSub
 	
 	public Point setUpPP()
 	{
-		int startx = (int)(Math.random()*9);
-		int starty = (int)(Math.random()*7);
+		int startx;
+		int starty;
 		
-		if(board[startx][starty] == 0&&board[startx][starty +1] == 0)
+		while(true)
 		{
-			board[startx][starty] = 1;
-			board[startx][starty + 1] = 1;
-		}
-		
-		else
-		{
-			setUpPP();
+			startx = (int)(Math.random()*9);
+			starty = (int)(Math.random()*7);
+			
+			if(board[startx][starty] == 0&&board[startx][starty+1] == 0)
+			{
+				board[startx][starty] = 1;
+				board[startx][starty + 1] = 1;
+				break;
+			}
+			
 		}
 		
 		//calculate where it will be in terms of pixels
 		Point Out = new Point();
-		Out.x = (startx + 1)*52;
-		Out.y = (starty + 1)*73;
+		Out.x = 45+(startx + 1)*55;
+		Out.y = 73+(starty + 1)*50;
 		//return the coordinates
 		return Out;
 		
