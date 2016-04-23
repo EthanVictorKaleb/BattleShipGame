@@ -1,5 +1,6 @@
 //this gives the game graphics
-import java.applet.Applet; 
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.*; 
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
@@ -15,6 +16,7 @@ public class BattleshipPaint extends java.applet.Applet implements ActionListene
 	private Font fnt12B = new Font("Arial", Font.BOLD, 12);
 	private Font fnt20B = new Font("Arial", Font.BOLD, 20);
 	
+	AudioClip music;
 	private ButtonGroup Attack;
 	private Button b_attack;
 	private TextField tf_cn;
@@ -34,11 +36,11 @@ public class BattleshipPaint extends java.applet.Applet implements ActionListene
 	private Button Connect;
 	private Button p2;
 	//the locations of the ships
-	private Point P_AC = new Point(52, 73);
-	private Point P_BS = new Point(110, 73);
-	private Point P_D = new Point(179, 73);
-	private Point S = new Point(262, 73);
-	private Point PP = new Point(320, 73);
+	private Point P_AC;
+	private Point P_BS;
+	private Point P_D;
+	private Point S;
+	private Point PP;
 	//these allow us to use the other classes
 	private Game Game = new Game();
 	private OSock OSock = new OSock();
@@ -69,8 +71,8 @@ public class BattleshipPaint extends java.applet.Applet implements ActionListene
 		
 		Image water;
 		water = getImage(getCodeBase(), "water.gif");//gif
-		//g.drawImage(water, 130, 65, 550, 500, this); //size and location of image
-		//g.drawImage(water, 130 + 620, 65, 550, 500, this); //size and location of image
+		g.drawImage(water, 130, 65, 550, 500, this); //size and location of image
+		g.drawImage(water, 130 + 620, 65, 550, 500, this); //size and location of image
 		//grid1
 		//vertical lines in grid1
 		g.fillRect(130, 10, 3, 550);
@@ -232,22 +234,27 @@ public class BattleshipPaint extends java.applet.Applet implements ActionListene
 		g.drawString("Number Coordinates:", 490, 665);
 		g.drawString("Letter Coordinates:", 510, 615);
 		
+		//the group logo
+		Image Grouplogo;
+		Grouplogo = getImage(getCodeBase(), "Company logo.png");
+		g.drawImage(Grouplogo, 900, 500 ,600 , 300, this);
+		
 		//pieces
 		Image Aircraft;
 		Aircraft = getImage(getCodeBase(), "AirCraft.png");
-		g.drawImage(Aircraft, P_AC.x, P_AC.y, 240, 250, this);
+		g.drawImage(Aircraft, 52, 73, 240, 250, this);
 		Image Battleship;
 		Battleship = getImage(getCodeBase(), "BattleShip.png");
-		g.drawImage(Battleship, P_BS.x, P_BS.y, 230, 230, this);
+		g.drawImage(Battleship, 110, 73, 230, 230, this);
 		Image Destroyer;
 		Destroyer = getImage(getCodeBase(), "Destroyer.png");
-		g.drawImage(Destroyer, P_D.x, P_D.y, 210, 210, this);
+		g.drawImage(Destroyer, 179, 73, 210, 210, this);
 		Image Submarine;
 		Submarine = getImage(getCodeBase(), "Submarine.png");
-		g.drawImage(Submarine, S.x, S.y, 130, 130, this);
+		g.drawImage(Submarine, 262, 73, 130, 130, this);
 		Image Patrol;
 		Patrol = getImage(getCodeBase(), "Patrol.png");
-		g.drawImage(Patrol, PP.x, PP.y, 130, 130, this);
+		g.drawImage(Patrol, 320, 73, 130, 130, this);
 		Image Redpin;
 		rp = getImage(getCodeBase(), "RedPin.png");
 		Image Whitepin;
@@ -371,7 +378,9 @@ public class BattleshipPaint extends java.applet.Applet implements ActionListene
 		p2.setVisible(true);
 		add(p2);
 		
-		//image button
+		music = getAudioClip(getCodeBase(), "Centuries8bit.wav");
+		music.loop();
+		
 	}//ends init method
 	
 	//auto generated methods because of the class BattleshipPaint's extensions
@@ -499,7 +508,7 @@ public class BattleshipPaint extends java.applet.Applet implements ActionListene
 		int xhit = Integer.parseInt(move[0]);
 		int xhitcoord = 52 + (58*(xhit+1));
 		int yhit = Integer.parseInt(move[1]);
-		int yhitcoord = 73 + (58*(yhit+1));
+		int yhitcoord = 52 + (58*(yhit+1));
 		//update board array with attack
 		Game.hit(xhit, yhit);
 		//update array of white or red pins
@@ -514,5 +523,5 @@ public class BattleshipPaint extends java.applet.Applet implements ActionListene
 			pin_numr++;
 		}
 		
-	}	
+	}
 }//end class
