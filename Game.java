@@ -35,7 +35,7 @@ public class Game
 	public Point setUpP_AC()
 	{
 		int startx = (int)(Math.random()*9);
-		int starty = (int)(Math.random()*5);
+		int starty = (int)(Math.random()*4);
 		
 		board[startx][starty] = 1;
 		board[startx][starty + 1] = 1;
@@ -63,14 +63,14 @@ public class Game
 		{
 			//randomly set top of ship coords
 			startx = (int)(Math.random()*9);
-			starty = (int)(Math.random()*6);
+			starty = (int)(Math.random()*5);
 			//if ship will not overlap do not loop again
 			if(board[startx][starty] == 0&&board[startx][starty+1] == 0&&board[startx][starty+2] == 0&&board[startx][starty+3] == 0)
 			{
 				board[startx][starty] = 1;
-				board[startx + 1][starty] = 1;
-				board[startx + 2][starty] = 1;
-				board[startx + 3][starty] = 1;
+				board[startx][starty + 1] = 1;
+				board[startx][starty + 2] = 1;
+				board[startx][starty + 3] = 1;
 				break;
 			}
 			
@@ -127,13 +127,13 @@ public class Game
 		{
 			//top ship coords
 			startx = (int)(Math.random()*9);
-			starty = (int)(Math.random()*6);
+			starty = (int)(Math.random()*7);
 			//if ship doesnt overlap
 			if(board[startx][starty] == 0&&board[startx][starty+1] == 0&&board[startx][starty+2] == 0)
 			{
 				board[startx][starty] = 1;
-				board[startx + 1][starty] = 1;
-				board[startx + 2][starty] = 1;
+				board[startx][starty+1] = 1;
+				board[startx][starty+2] = 1;
 				break;
 			}
 			
@@ -156,7 +156,7 @@ public class Game
 		while(true)
 		{
 			startx = (int)(Math.random()*9);
-			starty = (int)(Math.random()*7);
+			starty = (int)(Math.random()*8);
 			
 			if(board[startx][starty] == 0&&board[startx][starty+1] == 0)
 			{
@@ -287,5 +287,15 @@ public class Game
 		C = A + " " + B;
 		return C;		
 	}//end translate
+	
+	public void sleep(long time)
+	{
+		try
+		{
+		Thread.sleep(time);
+		}
+		catch(InterruptedException e){}
+		finally {}
+	}
 	
 }//end Game
