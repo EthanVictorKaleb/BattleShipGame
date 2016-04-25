@@ -141,6 +141,7 @@ public class OSocklocal
 	//this reads what the other player sends you, returns it as a string
 	public String readSock()
 	{
+		
 		String sockOut = null;
 		//handle IOException
 		try
