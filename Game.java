@@ -1,4 +1,5 @@
- import java.awt.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class Game 
 {
@@ -299,9 +300,18 @@ public class Game
 	//returns a string that can be sent through OSock
 	public String translate(String x, String y)
 	{
-		String A = Integer.toString(x.charAt(0) - 'A');
-		String B = Integer.toString(Integer.parseInt(y)-1);
-		String C = A + " " + B;
+		String C;
+		
+		if(!((x.charAt(0) >= 'A' && x.charAt(0) <= 'J') && (Integer.parseInt(y) >= 1 && Integer.parseInt(y) <= 10)))
+		{
+			C = "TRY AGAIN";
+		}
+		else
+		{
+			String A = Integer.toString(x.charAt(0) - 'A');
+			String B = Integer.toString(Integer.parseInt(y)-1);
+			C = A + " " + B;
+		}
 		return C;		
 	}//end translate
 	
@@ -370,6 +380,13 @@ public class Game
 		}//end if is player two
 		
 		return haveLost;
+	}
+	
+	public void notify(String message, Graphics x)
+	{
+		PopUp PopUp = new PopUp();
+		PopUp.init(message);
+		PopUp.paint(x);
 	}
 	
 }//end Game
